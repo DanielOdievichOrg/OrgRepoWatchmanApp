@@ -20,7 +20,13 @@ Some things you will need:
 * Be prepared to demo this solution during your following interview
 
 # Solution
-I believe the branch restrictions are these https://docs.github.com/en/github/administering-a-repository/enabling-branch-restrictions so that's what I implemented.
+I believe the branch restrictions are these https://docs.github.com/en/github/administering-a-repository/enabling-branch-restrictions.
+
+It looks like it is for public repositories only:
+	
+    Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server.
+
+Therefore I implemented it for only Public repos, and the repos going from Private to Public.
 
 ## Github Side
 Create Github Org https://github.com/DanielOdievichOrg.
