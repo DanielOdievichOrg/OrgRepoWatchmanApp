@@ -67,4 +67,7 @@ OrgRepoWatchmanApp2_USERNAME | Username for signing into Github
 OrgRepoWatchmanApp2_TOKEN | Personal Access Token for signing into Github
 OrgRepoWatchmanApp2_SECRET | Secret used by Github to check message validity via SHA1 hash
 
+![](docs/AzureWebSiteSettings.png?raw=true)
+[Full Size](docs/AzureWebSiteSettings.png?raw=true)
+
 Use the code in C# .NET Core application (run.csx) to listen to the message arriving, validate the hash, parse the message type, decide to operate on the right message, adjust branch protection level and create an issue.
