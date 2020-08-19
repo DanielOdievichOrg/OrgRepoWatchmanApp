@@ -18,28 +18,48 @@ Some things you will need:
 # Solution
 
 ## Github Side
-Created Github Org https://github.com/DanielOdievichOrg
+Create Github Org https://github.com/DanielOdievichOrg
 
-Created GitHub App https://github.com/organizations/DanielOdievichOrg/settings/apps/orgrepowatchmanapp2
+Create GitHub App https://github.com/organizations/DanielOdievichOrg/settings/apps/orgrepowatchmanapp2
 
-Granted OrgRepoWatchmanApp2 App permissions to the organization.
+Grant OrgRepoWatchmanApp2 App permissions to operate within organization. I chose these:
 
-Subscribed OrgRepoWatchmanApp2 App to "Repository created, deleted, archived, unarchived, publicized, privatized, edited, renamed, or transferred." events.
+	Administration 
+	Repository creation, deletion, settings, teams, and collaborators.
+	Contents 
+	Repository contents, commits, branches, downloads, releases, and merges.
+	Pull requests 
+	Pull requests and related comments, assignees, labels, milestones, and merges.
+	Projects 
+	Manage repository projects, columns, and cards.
+	Commit statuses 
+	Commit statuses.
+	Metadata 
+    Search repositories, list collaborators, and access repository metadata.
+    Administration 
+	Manage access to an organization.
+    Projects 
+    Manage organization projects, columns, and cards.
 
-Created a secret for hashing messages sent by webhook.
+Subscribe OrgRepoWatchmanApp2 App to this event:
+    
+    Repository
+    Repository created, deleted, archived, unarchived, publicized, privatized, edited, renamed, or transferred.
 
-Created a Personal Access Token for API usage.
+Create a secret for hashing messages sent by webhook.
 
-Pointed the webhook setting at the Azure web function app.
+Create a Personal Access Token for API usage.
+
+Point the webhook setting at the Azure web function app.
 
 ## Azure Side
-Created a Function App in Azure West US on consumption plan.
+Create a Function App in Azure. I chose my MSDN subscription to create an instance in West US on a consumption plan called OrgRepoWatchmanWebHook.
 
-Exposed it via https://orgrepowatchmanwebhook.azurewebsites.net/
+Expose it via web address. Mine is at https://orgrepowatchmanwebhook.azurewebsites.net/
 
-Created a Function called HttpTrigger.
+Created a C# .NET Core Function called HttpTrigger.
 
-Added settings:
+Add following settings to the Function App:
 
 Setting | Purpose
 -- | -- 
@@ -47,4 +67,4 @@ OrgRepoWatchmanApp2_USERNAME | Username for signing into Github
 OrgRepoWatchmanApp2_TOKEN | Personal Access Token for signing into Github
 OrgRepoWatchmanApp2_SECRET | Secret used by Github to check message validity via SHA1 hash
 
-Added C# .NET Core application (run.csx) to listen to the message, validate the hash, parse the message type, and react accordingly.
+Use the code in C# .NET Core application (run.csx) to listen to the message arriving, validate the hash, parse the message type, decide to operate on the right message, adjust branch protection level and create an issue.
