@@ -19,9 +19,8 @@ Some things you will need:
 * A README.md file in your web service's repository that documents how to run and use the service. Documentation is highly valued at GitHub and on the Professional Services team.
 * Be prepared to demo this solution during your following interview
 
-I believe the restrictions are these https://docs.github.com/en/github/administering-a-repository/enabling-branch-restrictions.
-
 # Solution
+I believe the branch restrictions are these https://docs.github.com/en/github/administering-a-repository/enabling-branch-restrictions so that's what I implemented.
 
 ## Github Side
 Create Github Org https://github.com/DanielOdievichOrg.
@@ -77,4 +76,10 @@ OrgRepoWatchmanApp2_SECRET | Secret used by Github to check message validity via
 ![](docs/AzureWebSiteSettings.png?raw=true)
 [Full Size](docs/AzureWebSiteSettings.png?raw=true)
 
-Use the code in C# .NET Core application (run.csx) to listen to the message arriving, validate the hash, parse the message type, decide to operate on the right message, adjust branch protection level and create an issue.
+The code in C# .NET Core application (run.csx):
+
+* Listens to the message arriving
+* Uses shared secret to compute and validate the hash and rejects messages where it does not match
+* Parses the message type and ignores messages of type that isn't relevant
+* Adjusts branch protection level 
+* Creates an issue to track protection level
