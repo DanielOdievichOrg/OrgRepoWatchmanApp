@@ -51,6 +51,9 @@ Subscribe OrgRepoWatchmanApp2 App to this event:
     Repository
     Repository created, deleted, archived, unarchived, publicized, privatized, edited, renamed, or transferred.
 
+![](docs/GitHubOrgWebApp.png?raw=true)
+[Full Size](docs/GitHubOrgWebApp.png?raw=true)
+
 Create a Personal Access Token for API usage (https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token).
 
 Point the webhook setting at the Azure web function app and create a secret for hashing messages sent by webhook (https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks).
