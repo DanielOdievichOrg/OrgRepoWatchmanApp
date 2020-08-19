@@ -46,11 +46,12 @@ Subscribe OrgRepoWatchmanApp2 App to this event:
     Repository
     Repository created, deleted, archived, unarchived, publicized, privatized, edited, renamed, or transferred.
 
-Create a secret for hashing messages sent by webhook.
-
 Create a Personal Access Token for API usage.
 
-Point the webhook setting at the Azure web function app.
+Point the webhook setting at the Azure web function app and create a secret for hashing messages sent by webhook.
+
+![](docs/GitHubWebHook.png?raw=true)
+[Full Size](docs/GitHubWebHook.png?raw=true)
 
 ## Azure Side
 Create a Function App in Azure. I chose my MSDN subscription to create an instance in West US on a consumption plan called OrgRepoWatchmanWebHook.
