@@ -3,14 +3,17 @@ Solution for GitHub API Challenge
 
 ## GitHub API Challenge
 GitHub has a powerful API that enables developers to easily access GitHub data. Companies often ask us to craft solutions to their specific problems. A common request we receive is for branches to be automatically protected upon creation.
+
 Please create a simple web service that listens for organization events to know when a repository has been created. When the repository is created please automate the protection of the master branch. Notify yourself with an @mention in an issue within the repository that outlines the protections that were added.
+
 Some things you will need:
-	· a GitHub account
-	· an organization (you can create one for free)
-	· a repository (in order to get a branch, you need a commit! Make sure to initialize with a README)
-	· a web service that listens for webhook deliveries
-	· A README.md file in your web service's repository that documents how to run and use the service. Documentation is highly valued at GitHub and on the Professional Services team.
-	· Be prepared to demo this solution during your following interview
+
+* a GitHub account
+* an organization (you can create one for free)
+* a repository (in order to get a branch, you need a commit! Make sure to initialize with a README)
+* a web service that listens for webhook deliveries
+* A README.md file in your web service's repository that documents how to run and use the service. Documentation is highly valued at GitHub and on the Professional Services team.
+* Be prepared to demo this solution during your following interview
 
 # Solution
 
