@@ -4,7 +4,11 @@ Solution for GitHub API Challenge
 ## GitHub API Challenge
 GitHub has a powerful API that enables developers to easily access GitHub data. Companies often ask us to craft solutions to their specific problems. A common request we receive is for branches to be automatically protected upon creation.
 
-Please create a simple web service that listens for organization events to know when a repository has been created. When the repository is created please automate the protection of the master branch. Notify yourself with an @mention in an issue within the repository that outlines the protections that were added.
+Please create a simple web service that listens for organization events to know when a repository has been created. 
+
+When the repository is created please automate the protection of the master branch. 
+
+Notify yourself with an @mention in an issue within the repository that outlines the protections that were added.
 
 Some things you will need:
 
@@ -15,12 +19,14 @@ Some things you will need:
 * A README.md file in your web service's repository that documents how to run and use the service. Documentation is highly valued at GitHub and on the Professional Services team.
 * Be prepared to demo this solution during your following interview
 
+I believe the restrictions are these https://docs.github.com/en/github/administering-a-repository/enabling-branch-restrictions.
+
 # Solution
 
 ## Github Side
-Create Github Org https://github.com/DanielOdievichOrg
+Create Github Org https://github.com/DanielOdievichOrg.
 
-Create GitHub App https://github.com/organizations/DanielOdievichOrg/settings/apps/orgrepowatchmanapp2
+Create GitHub App https://docs.github.com/en/developers/apps/creating-a-github-app (mine is https://github.com/organizations/DanielOdievichOrg/settings/apps/orgrepowatchmanapp2).
 
 Grant OrgRepoWatchmanApp2 App permissions to operate within organization. I chose these:
 
@@ -46,9 +52,9 @@ Subscribe OrgRepoWatchmanApp2 App to this event:
     Repository
     Repository created, deleted, archived, unarchived, publicized, privatized, edited, renamed, or transferred.
 
-Create a Personal Access Token for API usage.
+Create a Personal Access Token for API usage (https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token).
 
-Point the webhook setting at the Azure web function app and create a secret for hashing messages sent by webhook.
+Point the webhook setting at the Azure web function app and create a secret for hashing messages sent by webhook (https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks).
 
 ![](docs/GitHubWebHook.png?raw=true)
 [Full Size](docs/GitHubWebHook.png?raw=true)
