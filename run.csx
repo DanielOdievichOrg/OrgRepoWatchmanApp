@@ -97,7 +97,7 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
 
                 using (HttpClient httpClient = new HttpClient())
                 {
-                    log.LogInformation(String.Format("Calling protectionAPIUrl='{0}' with body=\n{1}", protectionAPIUrl, protectionSettingsBody));
+                    log.LogInformation(String.Format("Calling API='{0}' with body=\n{1}", protectionAPIUrl, protectionSettingsBody));
 
                     // Very interesting value for luke cage, but https://docs.github.com/en/rest/reference/repos#update-branch-protection says it must be so right now
                     MediaTypeWithQualityHeaderValue accept = new MediaTypeWithQualityHeaderValue("application/vnd.github.luke-cage-preview+json");
@@ -106,7 +106,6 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
                     httpClient.DefaultRequestHeaders.Authorization = authentication;
                     httpClient.DefaultRequestHeaders.Add("User-Agent", "Daniel Odievich");
                     httpClient.BaseAddress = new Uri(protectionAPIUrl);
-                    log.LogInformation(httpClient.BaseAddress.ToString());
                     StringContent content = new StringContent(protectionSettingsBody);
 
                     HttpResponseMessage responseFromGithub = await httpClient.PutAsync(protectionAPIUrl, content);
@@ -126,10 +125,43 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
                     }
                 }
 
+                // https://docs.github.com/en/rest/reference/issues#create-an-issue
+                string issueAPIUrl = String.Format("{0}/issues", repositoryToken["url"].ToString());
+                string issueBody = "{\"title\": \"This Repository master branch was protected\", \"body\": \"This branch was protected via /branches/master/protection API. FYI @danielodievich\"}";
+                
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    log.LogInformation(String.Format("Calling API='{0}' with body=\n{1}", issueAPIUrl, issueBody));
+
+                    MediaTypeWithQualityHeaderValue accept = new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json");
+                    httpClient.DefaultRequestHeaders.Accept.Add(accept);
+                    AuthenticationHeaderValue authentication = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(String.Format("{0}:{1}", authUsername, authToken))));
+                    httpClient.DefaultRequestHeaders.Authorization = authentication;
+                    httpClient.DefaultRequestHeaders.Add("User-Agent", "Daniel Odievich");
+                    httpClient.BaseAddress = new Uri(issueAPIUrl);
+                    StringContent content = new StringContent(issueBody);
+
+                    HttpResponseMessage responseFromGithub = await httpClient.PostAsync(issueAPIUrl, content);
+                    if (responseFromGithub.IsSuccessStatusCode)
+                    {
+                        string resultString = responseFromGithub.Content.ReadAsStringAsync().Result;
+                        log.LogInformation(resultString);
+                    }
+                    else
+                    {
+                        string resultString = responseFromGithub.Content.ReadAsStringAsync().Result;
+                        log.LogError("Unable to execute Github API with '{0}' '{1}'\n{2}", responseFromGithub.StatusCode, responseFromGithub.ReasonPhrase, resultString);
+
+                        var result3 = new ObjectResult(String.Format("Could not create issue in '{0}' repository", repositoryName));
+                        result3.StatusCode = StatusCodes.Status500InternalServerError;
+                        return result3;
+                    }
+                }
+
                 break;
 
             default:
-                log.LogError(String.Format("Event type '{0}' with sub type '{1}' is not supported by this web hook", githubEventType, eventSubType));
+                log.LogWarning(String.Format("Event type '{0}' with sub type '{1}' is not supported by this web hook", githubEventType, eventSubType));
 
                 var result = new ObjectResult(String.Format("Event type '{0}' with sub type '{1}' is not supported by this web hook", githubEventType, eventSubType));
                 result.StatusCode = StatusCodes.Status400BadRequest;
