@@ -33,7 +33,7 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
     string githubTraceID = req.Headers["X-GitHub-Delivery"];
     string githubEventType = req.Headers["X-GitHub-Event"];
 
-    //log.LogInformation(String.Format("Event='{0}', TraceID='{1}'\n{2}", githubEventType, githubTraceID, requestBody));
+    log.LogInformation(String.Format("Event='{0}', TraceID='{1}'\n{2}", githubEventType, githubTraceID, requestBody));
 
     // Check for the right kind of event
     // We want this one and no other
@@ -90,9 +90,10 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
                 // https://docs.github.com/en/rest/overview/other-authentication-methods
                 string authUsername = Environment.GetEnvironmentVariable("OrgRepoWatchmanApp2_USERNAME");
                 string authToken = Environment.GetEnvironmentVariable("OrgRepoWatchmanApp2_TOKEN");
+                // log.LogInformation(String.Format("authUsername='{0}' authToken={1}", authUsername, authToken));
 
                 // https://docs.github.com/en/rest/reference/repos#update-branch-protection
-                string protectionAPIUrl = String.Format("{0}/branches/master/protection", repositoryToken["url"].ToString());
+                string protectionAPIUrl = String.Format("{0}/branches/main/protection", repositoryToken["url"].ToString());
                 string protectionSettingsBody = "{\"required_status_checks\":{\"strict\":true,\"contexts\":[\"contexts\"]},\"enforce_admins\":true,\"required_pull_request_reviews\":{\"dismissal_restrictions\":{\"users\":[\"users\"],\"teams\":[\"teams\"]},\"dismiss_stale_reviews\":true,\"require_code_owner_reviews\":true,\"required_approving_review_count\":3},\"restrictions\":{\"users\":[\"users\"],\"teams\":[\"teams\"],\"apps\":[\"apps\"]}}";
 
                 using (HttpClient httpClient = new HttpClient())
@@ -100,7 +101,8 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
                     log.LogInformation(String.Format("Calling API='{0}' with body=\n{1}", protectionAPIUrl, protectionSettingsBody));
 
                     // Very interesting value for luke cage, but https://docs.github.com/en/rest/reference/repos#update-branch-protection says it must be so right now
-                    MediaTypeWithQualityHeaderValue accept = new MediaTypeWithQualityHeaderValue("application/vnd.github.luke-cage-preview+json");
+                    // Update on 04/17/2022, the value is now application/vnd.github.v3+json
+                    MediaTypeWithQualityHeaderValue accept = new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json");
                     httpClient.DefaultRequestHeaders.Accept.Add(accept);
                     AuthenticationHeaderValue authentication = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes(String.Format("{0}:{1}", authUsername, authToken))));
                     httpClient.DefaultRequestHeaders.Authorization = authentication;
@@ -127,7 +129,7 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
 
                 // https://docs.github.com/en/rest/reference/issues#create-an-issue
                 string issueAPIUrl = String.Format("{0}/issues", repositoryToken["url"].ToString());
-                string issueBody = "{\"title\": \"This Repository master branch was protected\", \"body\": \"This branch was protected via /branches/master/protection API. FYI @danielodievich\"}";
+                string issueBody = "{\"title\": \"This Repository main branch was protected\", \"body\": \"This branch was protected via /branches/main/protection API. FYI @danielodievich\"}";
                 
                 using (HttpClient httpClient = new HttpClient())
                 {
